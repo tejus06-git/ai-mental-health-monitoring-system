@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login - Mental Health Monitoring System</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #333;
+
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+
+        /* =========================
+           MAIN CARD
+        ========================= */
+
+        .login-container {
+
+            width: 90%;
+            max-width: 430px;
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 14px;
+
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.10);
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+
+            margin: 0;
+
+            color: #263859;
+
+            font-size: 27px;
+        }
+
+        .header p {
+
+            margin-top: 10px;
+
+            color: #666;
+
+            font-size: 14px;
+
+            line-height: 1.5;
+        }
+
+
+        /* =========================
+           FLASH MESSAGES
+        ========================= */
+
+        .message {
+
+            padding: 11px 13px;
+
+            border-radius: 7px;
+
+            margin-bottom: 18px;
+
+            font-size: 13px;
+
+            line-height: 1.4;
+        }
+
+        .message.success {
+
+            background: #eaf7ee;
+
+            color: #25633a;
+
+            border: 1px solid #b9e2c5;
+        }
+
+        .message.danger {
+
+            background: #fff0f0;
+
+            color: #9b2c2c;
+
+            border: 1px solid #f0bcbc;
+        }
+
+
+        /* =========================
+           FORM
+        ========================= */
+
+        .field {
+
+            margin-bottom: 20px;
+        }
+
+        label {
+
+            display: block;
+
+            font-weight: bold;
+
+            font-size: 14px;
+
+            margin-bottom: 7px;
+        }
+
+        input {
+
+            width: 100%;
+
+            padding: 12px;
+
+            border: 1px solid #cbd3df;
+
+            border-radius: 7px;
+
+            font-size: 14px;
+        }
+
+        input:focus {
+
+            outline: none;
+
+            border-color: #263859;
+        }
+
+
+        /* =========================
+           LOGIN BUTTON
+        ========================= */
+
+        button {
+
+            width: 100%;
+
+            padding: 13px;
+
+            background: #263859;
+
+            color: white;
+
+            border: none;
+
+            border-radius: 7px;
+
+            font-size: 15px;
+
+            cursor: pointer;
+
+            margin-top: 5px;
+        }
+
+        button:hover {
+
+            background: #1b2942;
+        }
+
+
+        /* =========================
+           REGISTER LINK
+        ========================= */
+
+        .register-section {
+
+            text-align: center;
+
+            margin-top: 22px;
+
+            padding-top: 20px;
+
+            border-top: 1px solid #e5e9f0;
+
+            font-size: 14px;
+
+            color: #666;
+        }
+
+        .register-section a {
+
+            color: #263859;
+
+            font-weight: bold;
+
+            text-decoration: none;
+        }
+
+        .register-section a:hover {
+
+            text-decoration: underline;
+        }
+
+
+        /* =========================
+           PRIVACY NOTE
+        ========================= */
+
+        .privacy-note {
+
+            margin-top: 20px;
+
+            background: #f4f7fb;
+
+            padding: 12px;
+
+            border-radius: 7px;
+
+            font-size: 12px;
+
+            color: #666;
+
+            line-height: 1.5;
+
+            text-align: center;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 500px) {
+
+            .login-container {
+
+                padding: 25px;
+
+            }
+
+            .header h1 {
+
+                font-size: 23px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div class="login-container">
+
+
+        <!-- =========================
+             HEADER
+        ========================= -->
+
+        <div class="header">
+
+            <h1>
+                Welcome Back
+            </h1>
+
+            <p>
+                Login to access your mental health assessment
+                and view your previous assessments.
+            </p>
+
+        </div>
+
+
+
+        <!-- =========================
+             FLASH MESSAGES
+        ========================= -->
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% if messages %}
+
+                {% for category, message in messages %}
+
+                    <div class="message {{ category }}">
+
+                        {{ message }}
+
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% endwith %}
+
+
+
+        <!-- =========================
+             LOGIN FORM
+        ========================= -->
+
+        <form method="POST" action="/login">
+
+
+            <div class="field">
+
+                <label for="username">
+                    Username
+                </label>
+
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Enter your username"
+                    required
+                    autocomplete="username"
+                >
+
+            </div>
+
+
+
+            <div class="field">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    required
+                    autocomplete="current-password"
+                >
+
+            </div>
+
+
+
+            <button type="submit">
+
+                Login
+
+            </button>
+
+
+        </form>
+
+
+
+        <!-- =========================
+             REGISTER
+        ========================= -->
+
+        <div class="register-section">
+
+            Don't have an account?
+
+            <a href="/register">
+                Create an account
+            </a>
+
+        </div>
+
+
+
+        <!-- =========================
+             PRIVACY NOTE
+        ========================= -->
+
+        <div class="privacy-note">
+
+            Your account uses only a username and password.
+            No real name, email address, phone number or student ID
+            is required for this system.
+
+        </div>
+
+
+    </div>
+
+
+</body>
+
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assessment Result</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: Arial, sans-serif; background: #f4f7fb; color: #263238; }
+        .header { background: #173f5f; color: white; padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; gap: 15px; flex-wrap: wrap; }
+        .header h1 { margin: 0; font-size: 23px; }
+        .header p { margin: 6px 0 0; font-size: 14px; opacity: .9; }
+        .header-right { display: flex; gap: 9px; align-items: center; }
+        .header-button { color: white; text-decoration: none; border: 1px solid rgba(255,255,255,.7); padding: 8px 12px; border-radius: 5px; font-size: 13px; }
+        .container { max-width: 900px; margin: 35px auto; padding: 0 20px; }
+        .result-card { background: white; border-radius: 12px; padding: 28px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,.08); margin-bottom: 28px; }
+        .result-card h2 { margin: 0 0 12px; font-size: 26px; }
+        .risk-badge { display: inline-block; padding: 11px 24px; border-radius: 25px; font-size: 17px; font-weight: bold; }
+        .low { background: #dff3e4; color: #207a3b; }
+        .moderate { background: #fff0d6; color: #a56600; }
+        .high { background: #f9dddd; color: #a52a2a; }
+        .message { color: #555; line-height: 1.6; max-width: 700px; margin: 14px auto 0; }
+        .section-title { color: #173f5f; font-size: 23px; margin: 25px 0 8px; }
+        .section-intro { color: #666; line-height: 1.6; margin-bottom: 20px; }
+        .recommendation-card { background: white; border-left: 5px solid #4d8ac2; border-radius: 8px; padding: 21px; margin-bottom: 14px; box-shadow: 0 2px 8px rgba(0,0,0,.06); }
+        .recommendation-card:nth-of-type(2) { border-left-color: #7a9e2b; }
+        .recommendation-card:nth-of-type(3) { border-left-color: #d88919; }
+        .recommendation-card:nth-of-type(4) { border-left-color: #8055a8; }
+        .recommendation-card h3 { margin: 0 0 14px; color: #173f5f; font-size: 19px; }
+        .label { color: #3972ae; font-size: 12px; font-weight: bold; letter-spacing: .5px; margin-top: 13px; margin-bottom: 5px; }
+        .recommendation-card p { margin: 0; color: #4d4d4d; line-height: 1.55; }
+        .tips { margin: 7px 0 0 19px; padding: 0; color: #4d4d4d; line-height: 1.55; }
+        .start-box { background: #fff5d9; border: 1px solid #e7c86a; border-radius: 7px; padding: 12px 14px; margin-top: 14px; }
+        .start-box strong { display: block; color: #765500; margin-bottom: 4px; }
+        .start-box p { color: #765500; }
+        .button-section { text-align: center; margin: 28px 0; }
+        .button { display: inline-block; text-decoration: none; background: #173f5f; color: white; padding: 11px 20px; border-radius: 6px; margin: 5px; font-size: 14px; }
+        .disclaimer { background: white; border: 1px solid #d9e1e8; border-radius: 8px; padding: 16px; margin-top: 22px; color: #666; font-size: 13px; line-height: 1.6; text-align: center; }
+        @media(max-width: 650px) { .header { padding: 18px 20px; } .header-right { width: 100%; } .container { padding: 0 15px; } .button { display: block; margin: 8px 0; } }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <h1>AI-Based Mental Health Monitoring System</h1>
+            <p>Assessment Result</p>
+        </div>
+        <div class="header-right">
+            <span>{{ session.get("username", "User") }}</span>
+            <a href="/history" class="header-button">History</a>
+            <a href="/logout" class="header-button">Logout</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="result-card">
+            <h2>Your Assessment Result</h2>
+
+            {% if risk_level == "Low" or assessment.risk_level == "Low" %}
+                <div class="risk-badge low">Low Risk</div>
+                <p class="message">Your responses indicate a lower level of risk based on this assessment. Continue maintaining healthy routines and paying attention to your overall well-being.</p>
+            {% elif risk_level == "Moderate" or assessment.risk_level == "Moderate" %}
+                <div class="risk-badge moderate">Moderate Risk</div>
+                <p class="message">Your responses indicate some areas that may be worth paying attention to. Small changes in your daily routine may help support your overall well-being.</p>
+            {% elif risk_level == "High" or assessment.risk_level == "High" %}
+                <div class="risk-badge high">High Risk</div>
+                <p class="message">Your responses indicate a higher level of risk based on this assessment. Consider paying attention to the areas highlighted below and reaching out to a qualified professional if you are concerned about your well-being.</p>
+            {% endif %}
+        </div>
+
+        <h2 class="section-title">Areas Worth Paying Attention To</h2>
+        <p class="section-intro">These areas were highlighted from your assessment responses. You do not need to change everything at once. Start with one small change that feels realistic for you.</p>
+
+        {% for recommendation in recommendations[:4] %}
+            <div class="recommendation-card">
+                <h3>{{ recommendation.area }}</h3>
+                <div class="label">WHAT YOU REPORTED</div>
+                <p>{{ recommendation.what_you_reported }}</p>
+
+                <div class="label">WHY IT MAY MATTER</div>
+                <p>{{ recommendation.why_it_matters or recommendation.why }}</p>
+
+                <div class="label">WHAT YOU CAN TRY</div>
+                <ul class="tips">
+                    {% for tip in recommendation.tips %}
+                        <li>{{ tip }}</li>
+                    {% endfor %}
+                </ul>
+
+                <div class="start-box">
+                    <strong>Start with this</strong>
+                    <p>{{ recommendation.start or recommendation.tips[0] }}</p>
+                </div>
+            </div>
+        {% endfor %}
+
+        <form method="POST" action="/detailed-analysis">
+            {% for field, value in assessment.responses.items() %}
+                <input type="hidden" name="{{ field }}" value="{{ value }}">
+            {% endfor %}
+            <div class="button-section">
+                <button type="submit" class="button" style="border:0; cursor:pointer;">View Detailed Analysis</button>
+                <a href="/" class="button">Take Another Assessment</a>
+                <a href="/history" class="button">View Assessment History</a>
+            </div>
+        </form>
+
+        <div class="disclaimer">
+            <strong>Important:</strong>
+            This system is developed for academic purposes and general self-awareness. It is not a medical diagnosis or a replacement for professional mental health advice. If you are concerned about your mental health, consider speaking with a qualified mental health professional.
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Assessment History</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #263238;
+        }
+
+
+        /* HEADER */
+
+        .header {
+            background: #173f5f;
+            color: white;
+            padding: 20px 30px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+
+        .header-left h1 {
+            margin: 0;
+            font-size: 23px;
+        }
+
+
+        .header-left p {
+            margin: 6px 0 0;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+
+        .username {
+            font-size: 14px;
+            margin-right: 5px;
+        }
+
+
+        .header-button {
+            text-decoration: none;
+            color: white;
+
+            border: 1px solid rgba(255,255,255,0.7);
+
+            padding: 8px 13px;
+            border-radius: 5px;
+
+            font-size: 13px;
+        }
+
+
+        .header-button:hover {
+            background: rgba(255,255,255,0.12);
+        }
+
+
+        /* MAIN CONTAINER */
+
+        .container {
+            max-width: 900px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+
+        /* TOP SECTION */
+
+        .top-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 25px;
+        }
+
+
+        .top-section h2 {
+            margin: 0;
+            font-size: 22px;
+            color: #173f5f;
+        }
+
+
+        .new-assessment-button {
+            text-decoration: none;
+
+            background: #173f5f;
+            color: white;
+
+            padding: 10px 18px;
+            border-radius: 6px;
+
+            font-size: 14px;
+        }
+
+
+        .new-assessment-button:hover {
+            background: #12344f;
+        }
+
+
+        /* HISTORY CARD */
+
+        .history-card {
+            background: white;
+
+            border-radius: 10px;
+
+            padding: 20px;
+
+            margin-bottom: 15px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            border-left: 5px solid #173f5f;
+
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        }
+
+
+        .assessment-info h3 {
+            margin: 0 0 8px;
+
+            font-size: 17px;
+            color: #263238;
+        }
+
+
+        .assessment-info p {
+            margin: 4px 0;
+
+            color: #666;
+            font-size: 14px;
+        }
+
+
+        /* RIGHT SECTION */
+
+        .right-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+
+        /* RISK BADGES */
+
+        .risk {
+            display: inline-block;
+
+            padding: 8px 15px;
+
+            border-radius: 20px;
+
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+
+        .low {
+            background: #dff3e4;
+            color: #207a3b;
+        }
+
+
+        .moderate {
+            background: #fff0d6;
+            color: #a56600;
+        }
+
+
+        .high {
+            background: #f9dddd;
+            color: #a52a2a;
+        }
+
+
+        /* DETAILS BUTTON */
+
+        .details-button {
+            text-decoration: none;
+
+            background: #e9f1f7;
+            color: #173f5f;
+
+            padding: 8px 13px;
+
+            border-radius: 6px;
+
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+
+        .details-button:hover {
+            background: #d9e7f1;
+        }
+
+
+        /* EMPTY HISTORY */
+
+        .empty {
+            background: white;
+
+            padding: 50px 25px;
+
+            text-align: center;
+
+            border-radius: 10px;
+
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        }
+
+
+        .empty h3 {
+            margin-top: 0;
+            color: #173f5f;
+        }
+
+
+        .empty p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+
+        .empty-button {
+            display: inline-block;
+
+            text-decoration: none;
+
+            background: #173f5f;
+            color: white;
+
+            padding: 10px 18px;
+
+            border-radius: 6px;
+
+            font-size: 14px;
+        }
+
+
+        /* MOBILE */
+
+        @media(max-width: 700px) {
+
+            .header {
+                padding: 18px 20px;
+            }
+
+
+            .header-right {
+                width: 100%;
+                margin-top: 15px;
+            }
+
+
+            .container {
+                padding: 0 15px;
+            }
+
+
+            .top-section {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+
+            .history-card {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+
+            .right-section {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div class="header-left">
+
+            <h1>
+                AI-Based Mental Health Monitoring System
+            </h1>
+
+            <p>
+                Assessment History
+            </p>
+
+        </div>
+
+
+        <div class="header-right">
+
+            <span class="username">
+                {{ session.get("username", "User") }}
+            </span>
+
+
+            <a href="/"
+               class="header-button">
+                New Assessment
+            </a>
+
+
+            <a href="/logout"
+               class="header-button">
+                Logout
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="container">
+
+
+        <!-- TOP SECTION -->
+
+        <div class="top-section">
+
+            <h2>
+                Previous Assessments
+            </h2>
+
+
+            <a href="/"
+               class="new-assessment-button">
+
+                Take New Assessment
+
+            </a>
+
+        </div>
+
+
+
+        <!-- ASSESSMENTS -->
+
+        {% if assessments %}
+
+
+            {% for assessment in assessments %}
+
+                <div class="history-card">
+
+
+                    <div class="assessment-info">
+
+                        <h3>
+                            Assessment #{{ assessment["id"] }}
+                        </h3>
+
+
+                        <p>
+                            Date:
+                            {{ assessment["created_at"] }}
+                        </p>
+
+                    </div>
+
+
+
+                    <div class="right-section">
+
+
+                        {% if assessment["risk_level"] == "Low" %}
+
+                            <span class="risk low">
+                                Low Risk
+                            </span>
+
+
+                        {% elif assessment["risk_level"] == "Moderate" %}
+
+                            <span class="risk moderate">
+                                Moderate Risk
+                            </span>
+
+
+                        {% elif assessment["risk_level"] == "High" %}
+
+                            <span class="risk high">
+                                High Risk
+                            </span>
+
+                        {% endif %}
+
+
+
+                        <a
+                            href="/history/{{ assessment['id'] }}"
+                            class="details-button"
+                        >
+                            View Details
+                        </a>
+
+
+                    </div>
+
+
+                </div>
+
+
+            {% endfor %}
+
+
+
+        {% else %}
+
+
+            <!-- EMPTY HISTORY -->
+
+            <div class="empty">
+
+                <h3>
+                    No assessments yet
+                </h3>
+
+
+                <p>
+                    Complete your first assessment to see it appear here.
+                </p>
+
+
+                <a
+                    href="/"
+                    class="empty-button"
+                >
+                    Start Assessment
+                </a>
+
+            </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+
+</body>
+
+</html>

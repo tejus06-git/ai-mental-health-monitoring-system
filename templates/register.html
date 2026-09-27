@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Create Account</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            color: #222;
+        }
+
+        .header {
+            background: #173f5f;
+            color: white;
+            text-align: center;
+            padding: 25px 15px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 25px;
+        }
+
+        .header p {
+            margin: 8px 0 0;
+            font-size: 15px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            margin-bottom: 8px;
+            color: #173f5f;
+        }
+
+        .intro {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        label {
+            display: block;
+            margin-top: 18px;
+            margin-bottom: 7px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #ccd3da;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #173f5f;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 12px;
+            background: #173f5f;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #12344f;
+        }
+
+        .message {
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 15px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .danger {
+            background: #f9dddd;
+            color: #a52a2a;
+        }
+
+        .success {
+            background: #dff3e4;
+            color: #26733a;
+        }
+
+        .login-link {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .login-link a {
+            color: #173f5f;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .privacy-note {
+            margin-top: 22px;
+            padding: 12px;
+            background: #f4f6f8;
+            border-radius: 6px;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #555;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div class="header">
+
+        <h1>AI-Based Mental Health Monitoring System</h1>
+
+        <p>Create Account</p>
+
+    </div>
+
+
+    <div class="container">
+
+        <div class="card">
+
+            <h2>Create Your Account</h2>
+
+            <p class="intro">
+                Create a username and password to use the
+                mental health assessment system.
+            </p>
+
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+
+                {% if messages %}
+
+                    {% for category, message in messages %}
+
+                        <div class="message {{ category }}">
+                            {{ message }}
+                        </div>
+
+                    {% endfor %}
+
+                {% endif %}
+
+            {% endwith %}
+
+
+            <form method="POST"
+                  action="/register">
+
+
+                <label for="username">
+                    Username
+                </label>
+
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Choose a username"
+                    autocomplete="username"
+                    required
+                >
+
+
+                <label for="password">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Create a password"
+                    autocomplete="new-password"
+                    required
+                >
+
+
+                <label for="confirm_password">
+                    Confirm Password
+                </label>
+
+                <input
+                    type="password"
+                    id="confirm_password"
+                    name="confirm_password"
+                    placeholder="Enter your password again"
+                    autocomplete="new-password"
+                    required
+                >
+
+
+                <button type="submit">
+                    Create Account
+                </button>
+
+            </form>
+
+
+            <div class="login-link">
+
+                Already have an account?
+
+                <a href="/login">
+                    Login here
+                </a>
+
+            </div>
+
+
+            <div class="privacy-note">
+
+                <strong>Privacy:</strong>
+                Only a username and password are required.
+                You do not need to provide your real name,
+                email, phone number or student ID.
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</body>
+
+</html>

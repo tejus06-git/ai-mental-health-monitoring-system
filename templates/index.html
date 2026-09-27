@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mental Health Monitoring System</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #333;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .header {
+            background: #263859;
+            color: white;
+            padding: 22px 25px;
+        }
+
+        .header-content {
+            width: 90%;
+            max-width: 1100px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header-text h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .header-text p {
+            margin: 8px 0 0;
+            font-size: 14px;
+        }
+
+        .user-section {
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        .user-section p {
+            margin: 0 0 8px;
+            font-size: 14px;
+        }
+
+        .nav-button {
+            display: inline-block;
+            text-decoration: none;
+            background: white;
+            color: #263859;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-left: 5px;
+        }
+
+        .nav-button:hover {
+            background: #e9edf5;
+        }
+
+        /* =========================
+           MAIN CONTAINER
+        ========================= */
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 30px auto;
+        }
+
+        /* =========================
+           SECTIONS
+        ========================= */
+
+        .section {
+            background: white;
+            padding: 25px;
+            margin-bottom: 22px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .section h2 {
+            margin-top: 0;
+            color: #263859;
+            border-bottom: 2px solid #e5e9f0;
+            padding-bottom: 10px;
+        }
+
+        .section-description {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        /* =========================
+           FORM GRID
+        ========================= */
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 7px;
+            font-size: 14px;
+        }
+
+        select {
+            padding: 11px;
+            border: 1px solid #cbd3df;
+            border-radius: 7px;
+            font-size: 14px;
+            background: white;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #263859;
+        }
+
+        /* =========================
+           BUTTON
+        ========================= */
+
+        .button-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        button {
+            background: #263859;
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1b2942;
+        }
+
+        /* =========================
+           NOTE
+        ========================= */
+
+        .note {
+            background: #fff8e6;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #665522;
+            margin-top: 20px;
+            line-height: 1.5;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                width: 95%;
+            }
+
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .user-section {
+                text-align: center;
+            }
+
+            .header-text h1 {
+                font-size: 23px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         HEADER
+    ========================= -->
+
+    <div class="header">
+
+        <div class="header-content">
+
+            <div class="header-text">
+
+                <h1>
+                    AI-Based Mental Health Monitoring System
+                </h1>
+
+                <p>
+                    AI-assisted assessment of mental health risk based on your responses
+                </p>
+
+            </div>
+
+
+            <div class="user-section">
+
+                <p>
+                    Logged in as:
+                    <strong>{{ session.get('username', 'User') }}</strong>
+                </p>
+
+                <a href="/history" class="nav-button">
+                    Assessment History
+                </a>
+
+                <a href="/logout" class="nav-button">
+                    Logout
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="container">
+
+
+        <form method="POST" action="/predict">
+
+
+            <!-- =========================
+                 BASIC INFORMATION
+            ========================= -->
+
+            <div class="section">
+
+                <h2>
+                    1. Basic Information
+                </h2>
+
+                <p class="section-description">
+                    Please provide some basic information before starting the assessment.
+                </p>
+
+
+                <div class="grid">
+
+
+                    <div class="field">
+
+                        <label>
+                            Age Range
+                        </label>
+
+                        <select name="AGERNG" required>
+
+                            <option value="16-20">
+                                16-20
+                            </option>
+
+                            <option value="21-25" selected>
+                                21-25
+                            </option>
+
+                            <option value="26-30">
+                                26-30
+                            </option>
+
+                            <option value="31-35">
+                                31-35
+                            </option>
+
+                            <option value="36-40">
+                                36-40
+                            </option>
+
+                            <option value="41-45">
+                                41-45
+                            </option>
+
+                            <option value="46-50">
+                                46-50
+                            </option>
+
+                            <option value="51-55">
+                                51-55
+                            </option>
+
+                            <option value="56-60">
+                                56-60
+                            </option>
+
+                            <option value="61+">
+                                61+
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <div class="field">
+
+                        <label>
+                            Gender
+                        </label>
+
+                        <select name="GENDER" required>
+
+                            <option value="Male" selected>
+                                Male
+                            </option>
+
+                            <option value="Female">
+                                Female
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <div class="field">
+
+                        <label>
+                            Education
+                        </label>
+
+                        <select name="EDU" required>
+
+                            <option value="SSC">
+                                SSC
+                            </option>
+
+                            <option value="HSC">
+                                HSC
+                            </option>
+
+                            <option value="Graduate" selected>
+                                Graduate
+                            </option>
+
+                            <option value="Post Graduate">
+                                Post Graduate
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <div class="field">
+
+                        <label>
+                            Profession
+                        </label>
+
+                        <select name="PROF" required>
+
+                            <option value="Student" selected>
+                                Student
+                            </option>
+
+                            <option value="Service holder (Private)">
+                                Service holder (Private)
+                            </option>
+
+                            <option value="Service holder (Government)">
+                                Service holder (Government)
+                            </option>
+
+                            <option value="Unemployed">
+                                Unemployed
+                            </option>
+
+                            <option value="Businessman">
+                                Businessman
+                            </option>
+
+                            <option value="Other">
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <div class="field">
+
+                        <label>
+                            Marital Status
+                        </label>
+
+                        <select name="MARSTS" required>
+
+                            <option value="Unmarried" selected>
+                                Unmarried
+                            </option>
+
+                            <option value="Married">
+                                Married
+                            </option>
+
+                            <option value="Divorced">
+                                Divorced
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <div class="field">
+
+                        <label>
+                            Place of Residence
+                        </label>
+
+                        <select name="RESDPL" required>
+
+                            <option value="City" selected>
+                                City
+                            </option>
+
+                            <option value="Town">
+                                Town
+                            </option>
+
+                            <option value="Village">
+                                Village
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <div class="field">
+
+                        <label>
+                            Living With
+                        </label>
+
+                        <select name="LIVWTH" required>
+
+                            <option value="With Family" selected>
+                                With Family
+                            </option>
+
+                            <option value="Without Family">
+                                Without Family
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =========================
+                 LIFESTYLE & ENVIRONMENT
+            ========================= -->
+
+            <div class="section">
+
+                <h2>
+                    2. Lifestyle and Environment
+                </h2>
+
+                <p class="section-description">
+                    These questions cover daily habits, surroundings and general lifestyle.
+                </p>
+
+
+                <div class="grid">
+
+
+                    <div class="field">
+
+                        <label>
+                            Satisfaction with Environment
+                        </label>
+
+                        <select name="ENVSAT" required>
+
+                            <option value="Yes" selected>
+                                Yes
+                            </option>
+
+                            <option value="No">
+                                No
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <div class="field">
+
+                        <label>
+                            Satisfaction with Position in Life
+                        </label>
+
+                        <select name="POSSAT" required>
+
+                            <option value="Yes" selected>
+                                Yes
+                            </option>
+
+                            <option value="No">
+                                No
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <div class="field">
+
+                        <label>
+                            Financial Stress
+                        </label>
+
+                        <select name="FINSTR" required>
+
+                            <option value="No" selected>
+                                No
+                            </option>
+
+                            <option value="Yes">
+                                Yes
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <div class="field">
+
+                        <label>
+                            Debt
+                        </label>
+
+                        <select name="DEBT" required>
+
+                            <option value="No" selected>
+                                No
+                            </option>
+
+                            <option value="Yes">
+                                Yes
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <div class="field">
+
+                        <label>
+                            Physical Exercise
+                        </label>
+
+                        <select name="PHYEX" required>
+
+                            <option value="Never" selected>
+                                Never
+                            </option>
+
+                            <option value="Sometimes">
+                                Sometimes
+                            </option>
+
+                            <option value="Regularly">
+                                Regularly
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <div class="field">
+
+                        <label>
+                            Smoking
+                        </label>
+
+                        <select name="SMOKE" required>
+
+                            <option value="No" selected>
+                                No
+                            </option>
+
+                            <option value="Yes">
+                                Yes
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <div class="field">
+
+                        <label>
+                            Alcohol Consumption
+                        </label>
+
+                        <select name="DRINK" required>
+
+                            <option value="No" selected>
+                                No
+                            </option>
+
+                            <option value="Yes">
+                                Yes
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <div class="field">
+
+                        <label>
+                            Physical Illness
+                        </label>
+
+                        <select name="ILLNESS" required>
+
+                            <option value="No" selected>
+                                No
+                            </option>
+
+                            <option value="Yes">
+                                Yes
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <div class="field">
+
+                        <label>
+                            Taking Prescribed Medicine
+                        </label>
+
+                        <select name="PREMED" required>
+
+                            <option value="No" selected>
+                                No
+                            </option>
+
+                            <option value="Yes">
+                                Yes
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <div class="field">
+
+                        <label>
+                            Eating Disorder
+                        </label>
+
+                        <select name="EATDIS" required>
+
+                            <option value="No" selected>
+                                No
+                            </option>
+
+                            <option value="Yes">
+                                Yes
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =========================
+                 SLEEP & DAILY ROUTINE
+            ========================= -->
+
+            <div class="section">
+
+                <h2>
+                    3. Sleep and Daily Routine
+                </h2>
+
+                <p class="section-description">
+                    These questions focus on sleep, screen time and work or study pressure.
+                </p>
+
+
+                <div class="grid">
+
+
+                    <div class="field">
+
+                        <label>
+                            Average Sleep
+                        </label>
+
+                        <select name="AVGSLP" required>
+
+                            <option value="Below 5 hours">
+                                Below 5 hours
+                            </option>
+
+                            <option value="5 hours">
+                                5 hours
+                            </option>
+
+                            <option value="6 hours">
+                                6 hours
+                            </option>
+
+                            <option value="7 hours" selected>
+                                7 hours
+                            </option>
+
+                            <option value="8 hours">
+                                8 hours
+                            </option>
+
+                            <option value="More than 8 hours">
+                                More than 8 hours
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <div class="field">
+
+                        <label>
+                            Insomnia
+                        </label>
+
+                        <select name="INSOM" required>
+
+                            <option value="No" selected>
+                                No
+                            </option>
+
+                            <option value="Yes">
+                                Yes
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <div class="field">
+
+                        <label>
+                            Time Spent on Social Media / Screens
+                        </label>
+
+                        <select name="TSSN" required>
+
+                            <option value="Less than 2 hours" selected>
+                                Less than 2 hours
+                            </option>
+
+                            <option value="2-4 hours a day">
+                                2-4 hours a day
+                            </option>
+
+                            <option value="5-7 hours a day">
+                                5-7 hours a day
+                            </option>
+
+                            <option value="8-10 hours a day">
+                                8-10 hours a day
+                            </option>
+
+                            <option value="More than 10 hours">
+                                More than 10 hours
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <div class="field">
+
+                        <label>
+                            Work / Study Pressure
+                        </label>
+
+                        <select name="WRKPRE" required>
+
+                            <option value="No Pressure" selected>
+                                No Pressure
+                            </option>
+
+                            <option value="Mild">
+                                Mild
+                            </option>
+
+                            <option value="Moderate">
+                                Moderate
+                            </option>
+
+                            <option value="Severe">
+                                Severe
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =========================
+                 MENTAL & EMOTIONAL WELL-BEING
+            ========================= -->
+
+            <div class="section">
+
+                <h2>
+                    4. Mental and Emotional Well-being
+                </h2>
+
+                <p class="section-description">
+                    These questions relate to feelings, emotional experiences and personal well-being.
+                </p>
+
+
+                <div class="grid">
+
+
+                    <div class="field">
+
+                        <label>
+                            Anxiety
+                        </label>
+
+                        <select name="ANXI" required>
+
+                            <option value="No" selected>
+                                No
+                            </option>
+
+                            <option value="Yes">
+                                Yes
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <div class="field">
+
+                        <label>
+                            Depressive Feelings
+                        </label>
+
+                        <select name="DEPRI" required>
+
+                            <option value="No" selected>
+                                No
+                            </option>
+
+                            <option value="Yes">
+                                Yes
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <div class="field">
+
+                        <label>
+                            Experienced Abuse
+                        </label>
+
+                        <select name="ABUSED" required>
+
+                            <option value="No" selected>
+                                No
+                            </option>
+
+                            <option value="Yes">
+                                Yes
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <div class="field">
+
+                        <label>
+                            Experienced Cheating / Betrayal
+                        </label>
+
+                        <select name="CHEAT" required>
+
+                            <option value="No" selected>
+                                No
+                            </option>
+
+                            <option value="Yes">
+                                Yes
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <div class="field">
+
+                        <label>
+                            Experienced Threats
+                        </label>
+
+                        <select name="THREAT" required>
+
+                            <option value="No" selected>
+                                No
+                            </option>
+
+                            <option value="Yes">
+                                Yes
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <div class="field">
+
+                        <label>
+                            Suicidal Thoughts
+                        </label>
+
+                        <select name="SUICIDE" required>
+
+                            <option value="No" selected>
+                                No
+                            </option>
+
+                            <option value="Yes">
+                                Yes
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <div class="field">
+
+                        <label>
+                            Feelings of Inferiority
+                        </label>
+
+                        <select name="INFER" required>
+
+                            <option value="No" selected>
+                                No
+                            </option>
+
+                            <option value="Yes">
+                                Yes
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <div class="field">
+
+                        <label>
+                            Family / Personal Conflict
+                        </label>
+
+                        <select name="CONFLICT" required>
+
+                            <option value="No" selected>
+                                No
+                            </option>
+
+                            <option value="Yes">
+                                Yes
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <div class="field">
+
+                        <label>
+                            Feelings of Loss
+                        </label>
+
+                        <select name="LOST" required>
+
+                            <option value="No" selected>
+                                No
+                            </option>
+
+                            <option value="Yes">
+                                Yes
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =========================
+                 SUBMIT
+            ========================= -->
+
+            <div class="button-container">
+
+                <button type="submit">
+                    Assess Mental Health Risk
+                </button>
+
+            </div>
+
+
+
+            <!-- =========================
+                 DISCLAIMER
+            ========================= -->
+
+            <div class="note">
+
+                <strong>Disclaimer:</strong>
+
+                This system provides an AI-based risk assessment for
+                educational and research purposes only. It is not a medical
+                diagnosis and should not replace professional mental health
+                advice.
+
+            </div>
+
+
+        </form>
+
+
+    </div>
+
+
+</body>
+
+</html>

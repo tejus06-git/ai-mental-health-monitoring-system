@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detailed Analysis</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: Arial, sans-serif; background: #f4f7fb; color: #263238; }
+        .header { background: #173f5f; color: white; padding: 20px 30px; display:flex; justify-content:space-between; align-items:center; gap:15px; flex-wrap:wrap; }
+        .header h1 { margin:0; font-size:23px; }
+        .header p { margin:6px 0 0; font-size:14px; opacity:.9; }
+        .header-right { display:flex; gap:9px; align-items:center; }
+        .header-button { color:white; text-decoration:none; border:1px solid rgba(255,255,255,.7); padding:8px 12px; border-radius:5px; font-size:13px; }
+        .container { max-width:900px; margin:35px auto; padding:0 20px; }
+        .result-card, .summary-card { background:white; border-radius:12px; padding:28px; box-shadow:0 2px 10px rgba(0,0,0,.08); margin-bottom:25px; }
+        .result-card { text-align:center; }
+        .result-card h2, .summary-card h2 { margin-top:0; font-size:25px; color:#173f5f; }
+        .risk-badge { display:inline-block; padding:11px 24px; border-radius:25px; font-size:17px; font-weight:bold; }
+        .low { background:#dff3e4; color:#207a3b; }
+        .moderate { background:#fff0d6; color:#a56600; }
+        .high { background:#f9dddd; color:#a52a2a; }
+        .section-title { color:#173f5f; font-size:23px; margin:25px 0 8px; }
+        .section-intro { color:#666; line-height:1.6; margin-bottom:20px; }
+        .recommendation-card { background:white; border-left:5px solid #4d8ac2; border-radius:8px; padding:23px; margin-bottom:16px; box-shadow:0 2px 8px rgba(0,0,0,.06); }
+        .recommendation-card h3 { margin:0 0 16px; color:#173f5f; font-size:20px; }
+        .label { color:#3972ae; font-size:12px; font-weight:bold; letter-spacing:.5px; margin-top:15px; margin-bottom:6px; }
+        .recommendation-card p { margin:0; color:#4d4d4d; line-height:1.6; }
+        .tips { margin:8px 0 0 20px; color:#4d4d4d; line-height:1.7; }
+        .start-box { background:#fff5d9; border:1px solid #e7c86a; border-radius:7px; padding:14px; margin-top:16px; }
+        .start-box strong { display:block; color:#765500; margin-bottom:5px; }
+        .start-box p { color:#765500; }
+        .answers-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px 18px; }
+        .answer { background:#f8faff; border:1px solid #e1e8ef; border-radius:7px; padding:12px; }
+        .answer strong { display:block; color:#3972ae; font-size:12px; margin-bottom:5px; }
+        .answer span { color:#444; font-size:14px; }
+        .button-section { text-align:center; margin:28px 0; }
+        .button { display:inline-block; text-decoration:none; background:#173f5f; color:white; padding:11px 20px; border-radius:6px; margin:5px; font-size:14px; }
+        .disclaimer { background:white; border:1px solid #d9e1e8; border-radius:8px; padding:16px; margin-top:22px; color:#666; font-size:13px; line-height:1.6; text-align:center; }
+        @media(max-width:650px) { .header {padding:18px 20px;} .header-right {width:100%;} .container {padding:0 15px;} .answers-grid {grid-template-columns:1fr;} .button {display:block; margin:8px 0;} }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <h1>AI-Based Mental Health Monitoring System</h1>
+            <p>{% if history_view %}Saved Assessment Details{% else %}Detailed Analysis{% endif %}</p>
+        </div>
+        <div class="header-right">
+            <span>{{ session.get("username", "User") }}</span>
+            <a href="/history" class="header-button">History</a>
+            <a href="/logout" class="header-button">Logout</a>
+        </div>
+    </div>
+
+    <div class="container">
+        {% if history_view %}
+            <div class="summary-card">
+                <h2>Assessment Summary</h2>
+                <p><strong>Assessment #{{ assessment.id }}</strong></p>
+                <p>Date: {{ assessment.created_at }}</p>
+                <p>
+                    Risk level:
+                    {% if assessment.risk_level == "Low" %}<strong>Low</strong>
+                    {% elif assessment.risk_level == "Moderate" %}<strong>Moderate</strong>
+                    {% elif assessment.risk_level == "High" %}<strong>High</strong>
+                    {% endif %}
+                </p>
+            </div>
+
+            <h2 class="section-title">Your Responses</h2>
+            <p class="section-intro">These are the answers saved for this assessment.</p>
+
+            <div class="summary-card">
+                <div class="answers-grid">
+                    <div class="answer"><strong>AGE RANGE</strong><span>{{ assessment.responses.get("AGERNG", "Not available") }}</span></div>
+                    <div class="answer"><strong>GENDER</strong><span>{{ assessment.responses.get("GENDER", "Not available") }}</span></div>
+                    <div class="answer"><strong>EDUCATION</strong><span>{{ assessment.responses.get("EDU", "Not available") }}</span></div>
+                    <div class="answer"><strong>PROFESSION</strong><span>{{ assessment.responses.get("PROF", "Not available") }}</span></div>
+                    <div class="answer"><strong>MARITAL STATUS</strong><span>{{ assessment.responses.get("MARSTS", "Not available") }}</span></div>
+                    <div class="answer"><strong>RESIDENCE</strong><span>{{ assessment.responses.get("RESDPL", "Not available") }}</span></div>
+                    <div class="answer"><strong>LIVING ARRANGEMENT</strong><span>{{ assessment.responses.get("LIVWTH", "Not available") }}</span></div>
+                    <div class="answer"><strong>ENVIRONMENT SATISFACTION</strong><span>{{ assessment.responses.get("ENVSAT", "Not available") }}</span></div>
+                    <div class="answer"><strong>PERSONAL SATISFACTION</strong><span>{{ assessment.responses.get("POSSAT", "Not available") }}</span></div>
+                    <div class="answer"><strong>FINANCIAL STRESS</strong><span>{{ assessment.responses.get("FINSTR", "Not available") }}</span></div>
+                    <div class="answer"><strong>DEBT</strong><span>{{ assessment.responses.get("DEBT", "Not available") }}</span></div>
+                    <div class="answer"><strong>PHYSICAL EXERCISE</strong><span>{{ assessment.responses.get("PHYEX", "Not available") }}</span></div>
+                    <div class="answer"><strong>SMOKING</strong><span>{{ assessment.responses.get("SMOKE", "Not available") }}</span></div>
+                    <div class="answer"><strong>DRINKING</strong><span>{{ assessment.responses.get("DRINK", "Not available") }}</span></div>
+                    <div class="answer"><strong>ILLNESS</strong><span>{{ assessment.responses.get("ILLNESS", "Not available") }}</span></div>
+                    <div class="answer"><strong>PREVIOUS MEDICATION</strong><span>{{ assessment.responses.get("PREMED", "Not available") }}</span></div>
+                    <div class="answer"><strong>EATING DISORDER</strong><span>{{ assessment.responses.get("EATDIS", "Not available") }}</span></div>
+                    <div class="answer"><strong>AVERAGE SLEEP</strong><span>{{ assessment.responses.get("AVGSLP", "Not available") }}</span></div>
+                    <div class="answer"><strong>INSOMNIA</strong><span>{{ assessment.responses.get("INSOM", "Not available") }}</span></div>
+                    <div class="answer"><strong>SCREEN / SOCIAL MEDIA TIME</strong><span>{{ assessment.responses.get("TSSN", "Not available") }}</span></div>
+                    <div class="answer"><strong>WORK / STUDY PRESSURE</strong><span>{{ assessment.responses.get("WRKPRE", "Not available") }}</span></div>
+                    <div class="answer"><strong>ANXIETY</strong><span>{{ assessment.responses.get("ANXI", "Not available") }}</span></div>
+                    <div class="answer"><strong>LOW MOOD / DEPRESSIVE FEELINGS</strong><span>{{ assessment.responses.get("DEPRI", "Not available") }}</span></div>
+                    <div class="answer"><strong>ABUSE</strong><span>{{ assessment.responses.get("ABUSED", "Not available") }}</span></div>
+                    <div class="answer"><strong>CHEATING / TRUST ISSUE</strong><span>{{ assessment.responses.get("CHEAT", "Not available") }}</span></div>
+                    <div class="answer"><strong>THREAT</strong><span>{{ assessment.responses.get("THREAT", "Not available") }}</span></div>
+                    <div class="answer"><strong>SUICIDE-RELATED RESPONSE</strong><span>{{ assessment.responses.get("SUICIDE", "Not available") }}</span></div>
+                    <div class="answer"><strong>INFERIORITY</strong><span>{{ assessment.responses.get("INFER", "Not available") }}</span></div>
+                    <div class="answer"><strong>CONFLICT</strong><span>{{ assessment.responses.get("CONFLICT", "Not available") }}</span></div>
+                    <div class="answer"><strong>FEELING LOST</strong><span>{{ assessment.responses.get("LOST", "Not available") }}</span></div>
+                </div>
+            </div>
+
+            <h2 class="section-title">Areas Worth Paying Attention To</h2>
+            <p class="section-intro">These areas are shown again from the saved responses for this assessment.</p>
+
+            {% for recommendation in recommendations[:4] %}
+                <div class="recommendation-card">
+                    <h3>{{ recommendation.area }}</h3>
+                    <div class="label">WHAT YOU REPORTED</div>
+                    <p>{{ recommendation.what_you_reported }}</p>
+                    <div class="label">WHY IT MAY MATTER</div>
+                    <p>{{ recommendation.why_it_matters or recommendation.why }}</p>
+                    <div class="label">WHAT YOU CAN TRY</div>
+                    <ul class="tips">
+                        {% for tip in recommendation.tips %}<li>{{ tip }}</li>{% endfor %}
+                    </ul>
+                    <div class="start-box">
+                        <strong>Start with this</strong>
+                        <p>{{ recommendation.start or recommendation.tips[0] }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+
+            <div class="button-section">
+                <a href="/history" class="button">Back to History</a>
+                <a href="/" class="button">Take New Assessment</a>
+            </div>
+
+        {% else %}
+            <div class="result-card">
+                <h2>Your Assessment Result</h2>
+                {% if risk_level == "Low" or assessment.risk_level == "Low" %}
+                    <div class="risk-badge low">Low Risk</div>
+                {% elif risk_level == "Moderate" or assessment.risk_level == "Moderate" %}
+                    <div class="risk-badge moderate">Moderate Risk</div>
+                {% elif risk_level == "High" or assessment.risk_level == "High" %}
+                    <div class="risk-badge high">High Risk</div>
+                {% endif %}
+            </div>
+
+            <h2 class="section-title">Detailed Analysis</h2>
+            <p class="section-intro">The following areas were identified from your assessment responses. Each section explains what was reported and provides some simple suggestions that may be useful.</p>
+
+            {% for recommendation in recommendations %}
+                <div class="recommendation-card">
+                    <h3>{{ recommendation.area }}</h3>
+                    <div class="label">WHAT YOU REPORTED</div>
+                    <p>{{ recommendation.what_you_reported }}</p>
+                    <div class="label">WHY IT MAY MATTER</div>
+                    <p>{{ recommendation.why_it_matters or recommendation.why }}</p>
+                    <div class="label">WHAT YOU CAN TRY</div>
+                    <ul class="tips">
+                        {% for tip in recommendation.tips %}<li>{{ tip }}</li>{% endfor %}
+                    </ul>
+                    <div class="start-box">
+                        <strong>Start with this</strong>
+                        <p>{{ recommendation.start or recommendation.tips[0] }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+
+            <div class="button-section">
+                <a href="/" class="button">Take Another Assessment</a>
+                <a href="/history" class="button">View Assessment History</a>
+            </div>
+        {% endif %}
+
+        <div class="disclaimer">
+            <strong>Important:</strong>
+            This system is developed for academic purposes and general self-awareness. It is not a medical diagnosis or a replacement for professional mental health advice. If you are concerned about your mental health, consider speaking with a qualified mental health professional.
+        </div>
+    </div>
+</body>
+</html>
